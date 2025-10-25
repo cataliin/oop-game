@@ -1,5 +1,28 @@
-.DS_Store
-.idea/editor.xml
-.idea/modules.xml
-.idea/oop-game.iml
-.idea/vcs.xml
+# ------------------------------------
+# General OS and Editor files
+# ------------------------------------
+.DS_Store             # Mac OS file
+
+# ------------------------------------
+# CLion/JetBrains IDE Specific files
+# ------------------------------------
+.idea/                # The main CLion configuration folder
+!/idea/editor.xml     # <--- OPTIONAL: Keep specific settings if needed
+!/idea/modules.xml    # <--- OPTIONAL: Keep specific settings if needed
+!/idea/vcs.xml        # <--- OPTIONAL: Keep specific settings if needed
+*.iml                 # Project modules file (e.g., oop-game.iml)
+
+# ------------------------------------
+# C++ Build Artifacts and Directories
+# ------------------------------------
+cmake-build-debug/    # CLion's default debug build directory
+cmake-build-release/  # CLion's default release build directory
+cmake-build-*/        # Catch-all for any build directory (recommended)
+# *nix executables
+*.o
+*.so
+*.a
+# Windows executables
+*.exe
+# Your specific executable name (if it's not handled by *.exe or the build folders)
+main                  # This explicitly ignores an executable named 'main'

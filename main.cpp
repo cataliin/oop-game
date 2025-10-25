@@ -1,7 +1,6 @@
 #include <iostream>
 #include <vector>
 #include <memory>
-#include <math.h>
 
 
 class Character {
