@@ -38,6 +38,8 @@ public:
         if (amount > 0 && this->getHealth()+amount <= 100)
             this->health+=amount;
     }
+
+    virtual void attack(Character* target) = 0;
 };
 
 class Item {
@@ -94,8 +96,18 @@ public:
     }
 };
 
-// class Enemy : public Character {
-// };
+class Enemy : public Character {
+private:
+    int experienceDrop;
+    int isBoss;
+public:
+    Enemy(const std::string& _name, int _health, int _attackPower, int _expDrop, int _isBoss = false):
+    Character(_name, _health, _attackPower), experienceDrop(_expDrop), isBoss(_isBoss){}
+
+    int getExpDrop() const {
+        return this->experienceDrop;
+    }
+};
 
 
 int main() {
