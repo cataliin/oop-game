@@ -25,4 +25,4 @@ cmake-build-*/        # Catch-all for any build directory (recommended)
 # Windows executables
 *.exe
 # Your specific executable name (if it's not handled by *.exe or the build folders)
-main                  # This explicitly ignores an executable named 'main'
+main
