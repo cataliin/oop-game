@@ -4,13 +4,14 @@
 
 
 class Character {
-private:
+protected:
     std::string name;
     int health;
+    int maxHealth;
     int attackPower;
 public:
     Character(const std::string& _name, int _health, int _attackPower):
-    name(_name),health(_health),attackPower(_attackPower){}
+    name(_name),health(_health),attackPower(_attackPower), maxHealth(_health){}
 
     std::string getName() const {
         return this->name;
@@ -18,6 +19,10 @@ public:
 
     int getHealth() const {
         return this->health;
+    }
+
+    int getMaxHealth() const {
+        return this->maxHealth;
     }
 
     int getAttackPower() const {
@@ -30,13 +35,17 @@ public:
 
     void takeDamage(int damage) {
         if (damage < 0) return;
-        if (isAlive() && this->health>=damage)
-            this->health-=damage;
+        this->health-=damage;
+        if (this->health<0)
+            this->health = 0;
     }
 
     void heal(int amount) {
-        if (amount > 0 && this->getHealth()+amount <= 100)
+        if (amount > 0) {
             this->health+=amount;
+            if (this->health > this->maxHealth)
+                this->health = this->maxHealth;
+        }
     }
 
     virtual void attack(Character* target) = 0;
@@ -72,6 +81,20 @@ private:
     int level;
     int experience;
     std::vector<std::shared_ptr<Item>> inventory;
+
+    void checkLevelUp() {
+        while (this->experience >=100) {
+            this->level+=1;
+            this->experience-=100;
+
+            this->maxHealth+=5;
+            this->health = this->maxHealth;
+            this->attackPower+=2;
+
+            std::cout << this->getName() << " has just leveled up to " << this->level << "!" << std::endl;
+        }
+    }
+
 public:
     Player(const std::string& _name, int _health, int _attackPower):
     Character(_name, _health, _attackPower), level(1), experience(0){}
@@ -79,6 +102,8 @@ public:
     void gainExperience(int amount) {
         if (amount < 0) return;
         this->experience+=amount;
+
+        this->checkLevelUp();
     }
 
     void addItem(std::shared_ptr<Item> item) {
@@ -94,6 +119,20 @@ public:
 
         inventory.erase(inventory.begin() + index);
     }
+
+    void attack(Character *target) override {
+        if (!target->isAlive()) {
+            std::cout << "The player " << target->getName() << " is already defeated" << std::endl;
+        }
+        int damageDealt = this->getAttackPower() + 2*this->level;
+        std::cout << this->getName() << " attacks " << target->getName() << " and deals " << damageDealt << "damage" << std::endl;
+        target->takeDamage(damageDealt);
+
+        if (!target->isAlive()) {
+            std::cout << this->getName() << " has just slain " << target->getName() << std::endl;
+            this->gainExperience(15);
+        }
+    };
 };
 
 class Enemy : public Character {
@@ -106,6 +145,20 @@ public:
 
     int getExpDrop() const {
         return this->experienceDrop;
+    }
+
+    void attack(Character* target) override {
+        if (!target->isAlive()) {
+            std::cout << "The player " << target->getName() << " is already defeated" << std::endl;
+        }
+
+        int damageDealt = this->getAttackPower();
+        std::cout << this->getName() << " has just hit " << target->getName() << " for " << damageDealt << std::endl;
+
+        target->takeDamage(damageDealt);
+        if (!target->isAlive()) {
+            std::cout << target->getName() << " has been slain" << std::endl;
+        }
     }
 };
 
