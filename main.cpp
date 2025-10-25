@@ -99,6 +99,10 @@ public:
     Player(const std::string& _name, int _health, int _attackPower):
     Character(_name, _health, _attackPower), level(1), experience(0){}
 
+    const std::vector<std::shared_ptr<Item>>& getInventory() const {
+        return this->inventory;
+    }
+
     void gainExperience(int amount) {
         if (amount < 0) return;
         this->experience+=amount;
@@ -170,10 +174,31 @@ int main() {
 
     p1.addItem(potion1);
     p1.addItem(potion2);
+
+    const auto& playerInventory = p1.getInventory();
+
+    if (playerInventory.empty()) {
+        std::cout << "The inventory is empty" << std::endl;
+    }
+    else {
+        for (size_t i = 0;i<playerInventory.size(); ++i) {
+            std::cout<<"["<<i<<"]"<<playerInventory[i]->getName() << std::endl;
+        }
+    }
+
     p1.takeDamage(50);
     std::cout << p1.getHealth() << std::endl;
     p1.useItem(0);
     std::cout << p1.getHealth() << std::endl;
+
+    if (playerInventory.empty()) {
+        std::cout << "The inventory is empty" << std::endl;
+    }
+    else {
+        for (size_t i = 0;i<playerInventory.size(); ++i) {
+            std::cout<<"["<<i<<"]"<<playerInventory[i]->getName() << std::endl;
+        }
+    }
 
 
     return 0;
