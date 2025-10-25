@@ -1,1 +1,5 @@
 .DS_Store
+.idea/editor.xml
+.idea/modules.xml
+.idea/oop-game.iml
+.idea/vcs.xml
